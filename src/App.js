@@ -1,26 +1,55 @@
+// worked with solution code
+
 import React, { Component } from 'react';
 import TMDB from './TMDB.js';
 import FilmListing from './FilmListings.jsx';
 import FilmDetails from './FilmDetails.jsx';
 
 class App extends Component {
-  constructor(props) {
-  super(props);
-  this.state.films = true
-  this.state.faves = true
-  this.state.current = true
-  this.handleFaveToggle = this.handleFaveToggle.bind(this)
-    array.prototype.slice()
-    array.prototype.indexOf(0)
+    constructor(props) {
+    super(props)
+    this.handleFaveToggle = this.handleFaveToggle.bind(this)
+    this.handleDetailsClick = this.handleDetailsClick.bind(this)
+    this.state = {
+        films: TMDB.films,
+        faves: [],
+        current: {}
+    }
+  }
 
-}
-  render()  {
+handleFaveToggle(film) {
+    const faves = this.state.faves.slice()
+    const filmIndex = faves.indexOf(film)
+
+    if ( filmIndex > -1 ) {
+      console.log("Removing " + film.title + " from faves")
+      faves.splice(filmIndex, 1)
+    } else {
+      console.log("Adding " + film.title + " to faves")
+      faves.push(film)
+    }
+
+    this.setState({faves})
+  }
+
+  handleDetailsClick(film) {
+    console.log("Fetching details for " + film.title)
+    const url = `https://api.themoviedb.org/3/movie/${film.id}?api_key=${TMDB.api_key}&append_to_response=videos,images&language=en`
+    fetch(url).then(response => {
+       response.json().then(data => {
+      console.log(data)
+      this.setState({current: data})
+  })
+})
+  }
+
+  render() {
     return (
-    <div className="film-library">
-    <FilmListing films={TMDB.films} />
-    <FilmDetails films={TMDB.films} />
+      <div className="film-library">
+        <FilmListing films={this.state.films} faves={this.state.faves} onFaveToggle={this.handleFaveToggle} onDetailsClick={this.handleDetailsClick} />
+        <FilmDetails film={this.state.current} />
       </div>
-      )
+    )
   }
 }
 

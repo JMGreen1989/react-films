@@ -1,11 +1,11 @@
 //  worked with film solution
 
-import React, { Component } from 'react';
+import React, from 'react';
 import FilmPoster from './FilmPoster.js';
 import Fave from './Fave';
 
 
-class FilmRow extends Component {
+FilmRow(props) {
   constructor(props) {
   super(props)
   this.handleDetailsClick = this.handleDetailsClick.bind(this)
@@ -13,9 +13,9 @@ class FilmRow extends Component {
 handleDetailsClick(film) {
 console.log("Fetching details for " + film.title)
 }
-  render() {
+
     return(
-      <div className="film-row" onClick={() => this.handleDetailsClick(this.props.film)}>
+      <div className="film-row" onClick={() => this.handleDetailsClick(props.film)}>
       <FilmPoster film={this.props.film} />
       <div className="film-summary">
       <h1>{this.props.film.title}</h1>
@@ -25,6 +25,5 @@ console.log("Fetching details for " + film.title)
       </div>
       )
   }
-}
 
 export default FilmRow;
